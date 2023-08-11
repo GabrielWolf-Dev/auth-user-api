@@ -3,7 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const connection = require("./db/connection");
-const User = require("./models/User");
+const UserRoutes = require("./routes/UserRoutes");
 
 const app = express();
 
@@ -12,6 +12,9 @@ app.use(express.json());
 
 // Solve CORS
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+
+// Routes
+app.use("/users", UserRoutes);
 
 connection
   .sync()
