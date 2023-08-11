@@ -18,7 +18,7 @@ const User = db.define("User", {
     required: true,
   },
   phone: {
-    type: DataTypes.INTEGER(11),
+    type: DataTypes.STRING(11),
     allowNull: false,
   },
 });

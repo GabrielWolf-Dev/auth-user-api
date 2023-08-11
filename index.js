@@ -17,7 +17,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use("/users", UserRoutes);
 
 connection
-  .sync()
+  .sync() // { force: true }
   .then(() => {
     app.listen(process.env.PORT, () => {
       console.log("----- Server is Running -----");
