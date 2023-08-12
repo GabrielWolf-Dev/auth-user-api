@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const UserController = require("../controllers/UserController");
 const UsersMiddleware = require("../middlewares/UsersMiddleware");
+const verifyToken = require("../middlewares/verifyToken");
 
 router.post(
   "/register",
@@ -9,5 +10,6 @@ router.post(
 );
 router.post("/login", UsersMiddleware.validateLogin, UserController.login);
 router.get("/checkUser", UserController.checkUser);
+router.patch("/edit/:id", verifyToken, UserController.editUser);
 
 module.exports = router;

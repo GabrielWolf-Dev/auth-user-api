@@ -83,8 +83,13 @@ const checkUser = async (req, res) => {
   res.status(200).send(currentUser);
 };
 
+const editUser = async (req, res) => {
+  res.status(200).json({ message: "deu certo!" });
+};
+
 module.exports = {
   register,
   login,
   checkUser,
+  editUser,
 };
