@@ -10,6 +10,11 @@ router.post(
 );
 router.post("/login", UsersMiddleware.validateLogin, UserController.login);
 router.get("/checkUser", UserController.checkUser);
-router.patch("/edit/:id", verifyToken, UserController.editUser);
+router.patch(
+  "/edit/:id",
+  UsersMiddleware.validateBodyReq,
+  verifyToken,
+  UserController.editUser
+);
 
 module.exports = router;

@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const createUserToken = require("../helpers/createUserToken");
 const getToken = require("../helpers/getToken");
+const getUserByToken = require("../helpers/getUserByToken");
+const { where } = require("sequelize");
 
 const register = async (req, res) => {
   const { name, phone, email, password } = req.body;
@@ -84,7 +86,47 @@ const checkUser = async (req, res) => {
 };
 
 const editUser = async (req, res) => {
-  res.status(200).json({ message: "deu certo!" });
+  const { id } = req.params;
+  const { name, phone, email, password, confirmPassword } = req.body;
+  const token = getToken(req);
+
+  const user = await getUserByToken(token);
+
+  const isEmailExists = await User.findOne({ raw: true, where: { email } });
+
+  if (user.email !== email && isEmailExists) {
+    return res.status(400).json({ message: "Use another non-existing email" });
+  }
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({
+      status: 400,
+      message: "The password and your confirmation must match!",
+    });
+  } else if (password === confirmPassword && password != null) {
+    const salt = await bcrypt.genSalt(12);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    user.password = passwordHash;
+  }
+
+  const updatedData = {
+    name,
+    email,
+    phone,
+    password: user.password,
+  };
+
+  try {
+    await User.update(updatedData, { where: { id: id } });
+
+    res.status(200).json({
+      status: 200,
+      message: "User updated successfully!",
+    });
+  } catch ({ message }) {
+    return res.status(500).json({ status: 500, message });
+  }
 };
 
 module.exports = {
