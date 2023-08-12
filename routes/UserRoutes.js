@@ -8,5 +8,6 @@ router.post(
   UserController.register
 );
 router.post("/login", UsersMiddleware.validateLogin, UserController.login);
+router.get("/checkUser", UserController.checkUser);
 
 module.exports = router;

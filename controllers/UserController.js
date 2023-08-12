@@ -1,7 +1,9 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 const createUserToken = require("../helpers/createUserToken");
+const getToken = require("../helpers/getToken");
 
 const register = async (req, res) => {
   const { name, phone, email, password } = req.body;
@@ -65,7 +67,24 @@ const login = async (req, res) => {
   );
 };
 
+const checkUser = async (req, res) => {
+  let currentUser;
+
+  if (req.headers.authorization) {
+    const token = getToken(req);
+    const decoded = jwt.verify(token, process.env.CREATE_TK_JWT_SECRET);
+
+    currentUser = await User.findOne({ raw: true, where: { id: decoded.id } });
+    currentUser.password = undefined;
+  } else {
+    currentUser = null;
+  }
+
+  res.status(200).send(currentUser);
+};
+
 module.exports = {
   register,
   login,
+  checkUser,
 };
