@@ -46,6 +46,29 @@ const validateBodyReq = (req, res, next) => {
   next();
 };
 
+const validateLogin = (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ status: 400, message: "Email is required." });
+  }
+
+  if (!password) {
+    return res
+      .status(400)
+      .json({ status: 400, message: "Password is required." });
+  }
+
+  if (typeof email !== "string" || typeof password !== "string") {
+    return res
+      .status(400)
+      .json({ status: 400, message: "Fields must be of type string" });
+  }
+
+  next();
+};
+
 module.exports = {
   validateBodyReq,
+  validateLogin,
 };

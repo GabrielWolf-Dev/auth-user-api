@@ -7,5 +7,6 @@ router.post(
   UsersMiddleware.validateBodyReq,
   UserController.register
 );
+router.post("/login", UsersMiddleware.validateLogin, UserController.login);
 
 module.exports = router;

@@ -1,6 +1,11 @@
 const jwt = require("jsonwebtoken");
 
-const createUserToken = async (user, message, req, res) => {
+const createUserToken = async (
+  user,
+  message = "Successfully created token",
+  req,
+  res
+) => {
   // create token
   const token = jwt.sign(
     {
